@@ -7,12 +7,14 @@ ssh = new node_ssh();
 
 // the method that starts the deployment process
 function main() {
+  console.log("Entered main function");
   console.log('Deployment started.');
   sshConnect();
 }
 
 // installs PM2
 function installPM2() {
+  console.log("Entered installPM2 function");
   return ssh.execCommand(
     'sudo npm install pm2 -g', {
       cwd: '/home/ubuntu'
@@ -21,6 +23,7 @@ function installPM2() {
 
 // transfers local project to the remote server
 function transferProjectToRemote(failed, successful) {
+  console.log("Entered transferProjectToRemote function");
   return ssh.putDirectory(
     '../hackathon-starter',
     '/home/ubuntu/hackathon-starter-temp',
@@ -48,6 +51,7 @@ function transferProjectToRemote(failed, successful) {
 
 // creates a temporary folder on the remote server
 function createRemoteTempFolder() {
+  console.log("Entered createRemoteTempFolder function");
   return ssh.execCommand(
     'rm -rf hackathon-starter-temp && mkdir hackathon-starter-temp', {
       cwd: '/home/ubuntu'
@@ -56,6 +60,7 @@ function createRemoteTempFolder() {
 
 // stops mongodb and node services on the remote server
 function stopRemoteServices() {
+  console.log("Entered stopRemoteServices function");
   return ssh.execCommand(
     'pm2 stop all && sudo service mongod stop', {
       cwd: '/home/ubuntu'
@@ -64,14 +69,16 @@ function stopRemoteServices() {
 
 // updates the project source on the server
 function updateRemoteApp() {
+  console.log("Entered updateRemoteApp function");
   return ssh.execCommand(
     'mkdir hackathon-starter && cp -r hackathon-starter-temp/* hackathon-starter/ && rm -rf hackathon-starter-temp', {
-      cwd: '/home/ubuntu'
+      cwd: '/home/ubuntu'    
   });
 }
 
 // restart mongodb and node services on the remote server
 function restartRemoteServices() {
+  console.log("Entered restartRemoteServices function");
   return ssh.execCommand(
     'cd hackathon-starter && sudo service mongod start && pm2 start app.js', {
       cwd: '/home/ubuntu'
@@ -80,6 +87,7 @@ function restartRemoteServices() {
 
 // connect to the remote server
 function sshConnect() {
+  console.log("Entered sshConnect function");
   console.log('Connecting to the server...');
 
   ssh
